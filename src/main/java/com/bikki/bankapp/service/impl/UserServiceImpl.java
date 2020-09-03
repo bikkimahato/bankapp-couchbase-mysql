@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
-//@Qualifier("UserServiceImpl")
+@Qualifier("UserServiceImpl")
 public class UserServiceImpl implements UserService {
 
 
@@ -26,7 +28,20 @@ public class UserServiceImpl implements UserService {
 
         ResAddUser resAddUser = new ResAddUser("success");
         User user = new User(reqAddUser);
+        user.setCreated(LocalDateTime.now());
         userRepository.save(user);
         return resAddUser;
     }
+
+    @Override
+    public User findByUsername(String username) {
+        User user = userRepository.findByUsername(username);
+        ResAddUser resAddUser = null;
+        if (user == null) {
+            resAddUser = new ResAddUser("failure");
+        }
+        resAddUser = new ResAddUser("success");
+        return user;
+    }
+
 }

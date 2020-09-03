@@ -1,5 +1,6 @@
 package com.bikki.bankapp.controller;
 
+import com.bikki.bankapp.model.User;
 import com.bikki.bankapp.pojos.BaseResponse;
 import com.bikki.bankapp.pojos.request.ReqAddUser;
 import com.bikki.bankapp.pojos.response.ResAddUser;
@@ -17,7 +18,7 @@ import javax.validation.Valid;
 
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
@@ -38,5 +39,10 @@ public class UserController {
                 ),
                 HttpStatus.OK
         );
+    }
+
+    @PostMapping(value = "/findByUsername")
+    public ResponseEntity<User> findByUsername(@RequestBody String username) {
+        return new ResponseEntity<User>(userService.findByUsername(username), HttpStatus.OK);
     }
 }

@@ -1,34 +1,34 @@
 package com.bikki.bankapp.model;
 
 import com.bikki.bankapp.pojos.request.ReqAddUser;
+import com.bikki.bankapp.utils.Utils;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.couchbase.core.mapping.Document;
 import org.springframework.data.couchbase.core.mapping.Field;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.EntityListeners;
-import javax.persistence.Id;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
+import org.springframework.data.couchbase.core.mapping.id.GenerationStrategy;
+
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Document
-//@EntityListeners(AuditingEntityListener.class)
 @Builder
 public class User implements Serializable {
 
     @Id
     @Field
-    private long id;
+    private String id;
 
     @Field
     @NotNull
@@ -38,13 +38,15 @@ public class User implements Serializable {
     @NotNull
     private String password;
 
-    @CreationTimestamp
-    private LocalDateTime createdAt;
+    @Field
+    @NotNull
+    private LocalDateTime created;
 
-    @UpdateTimestamp
-    private LocalDateTime modifiedAt;
+    @Field
+    private LocalDateTime updated;
 
     public User(ReqAddUser reqAddUser) {
+        this.id = Utils.generateRandomUUID();
         this.username = reqAddUser.getUsername();
         this.password = reqAddUser.getPassword();
     }
